@@ -1,0 +1,14 @@
+body {
+    background-color: #ffffff;
+    font-size: 1.75em;
+    font-family: 'Limelight', cursive;
+}
+
+a {
+  text-decoration: none;
+}
+
+header {
+    width: 100%;
+    margin: 1% auto 4%;
+}

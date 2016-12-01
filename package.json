@@ -1,0 +1,42 @@
+{
+  "name": "fetch",
+  "version": "1.0.0",
+  "description": "fetch users from json",
+  "main": "bundle.js",
+  "jsnext:main": "src/index.js",
+  "scripts": {
+    "lint": "eslint **/**.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pnowak/laboratorium/fetch.git"
+  },
+  "keywords": [
+    "fetch",
+    "promise",
+    "users",
+    "json file"
+  ],
+  "author": "pnowak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pnowak/laboratorium/fetch"
+  },
+  "homepage": "https://github.com/pnowak/laboratorium/fetch",
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.0",
+    "babel-eslint": "^7.0.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015": "^6.18.0",
+    "eslint": "^3.8.1",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-loader": "^1.6.0",
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "webpack": "^1.13.3",
+    "webpack-livereload-plugin": "^0.9.0"
+  }
+}
