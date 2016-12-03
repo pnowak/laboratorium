@@ -1,9 +1,9 @@
 'use strict';
 
-function filterActive(data, condition) {
+function filterActive(data, active = true) {
 	let filter = data.filter(function (item, index) {
 		for (let i in item) {
-			if ((i === condition) && (item[i] === true)) {
+			if ((i === 'active') && (item[i] === active)) {
 				return item;
 			}
 		}
