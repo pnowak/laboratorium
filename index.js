@@ -3,8 +3,8 @@
 import status from './src/status';
 import json from './src/json';
 import filterActive from './src/active';
+import mapName from './src/mapUsers';
 import createLi from './src/li';
-import { get } from './src/helpers';
 import { isWomen, isMen, filterGender } from './src/gender';
 
 const url = 'http://zadanie.laboratorium.ee/users.json';
@@ -24,15 +24,16 @@ fetch(url)
 
         	return active;
         }).then(function(active) {
-            active.forEach(function (item, index) {
-                for (let prop in item) {
-                    if (data.hasOwnProperty(prop)) {
-                        
-                    }
+            const sort = active.sort(function (a, b) { 
+                if (a.last_name === null || b.last_name === null) { 
+                    return;
                 }
-                console.log(item);
+                return a.last_name.localeCompare(b.last_name);
             });
 
+            return sort;
+        }).then(function(sort) {
+            mapName(sort);
         }).catch(function(error) {
           	console.log('Request failed', error);
         });
