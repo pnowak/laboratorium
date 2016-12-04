@@ -66,8 +66,6 @@
 
 	var _li2 = _interopRequireDefault(_li);
 
-	var _helpers = __webpack_require__(5);
-
 	var _gender = __webpack_require__(7);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -90,7 +88,6 @@
 	        if (a.last_name === null || b.last_name === null) {
 	            return;
 	        }
-
 	        return a.last_name.localeCompare(b.last_name);
 	    });
 
@@ -175,22 +172,44 @@
 	function mapName(data) {
 		return data.map(function (item, index) {
 			item.full_name = [item.last_name, item.first_name, item.username].join(' ');
-			createLi(item.full_name);
+			createLi(item.full_name, item);
 		});
 	}
 
-	function createLi(value) {
+	function createLi(value, item) {
 		var node = (0, _helpers.get)('users');
 		var li = document.createElement('li');
 		var content = document.createTextNode(value);
 
 		li.appendChild(content);
-		li.addEventListener('click', createUser, false);
+		li.addEventListener('click', function (e) {
+			createUser(item);
+		}, false);
 		node.appendChild(li);
 	}
 
 	function createUser(item) {
-		console.log(item);
+		var root = (0, _helpers.get)('user');
+
+		if (root.textContent !== '') {
+			var child = root.childNodes;
+			var arrayChild = Array.from(child);
+
+			arrayChild.forEach(function (item, index) {
+				console.log(item);
+				item.classList.add('disappear');
+			});
+		}
+
+		for (var prop in item) {
+			if (item.hasOwnProperty(prop)) {
+				var p = document.createElement('p');
+				var content = document.createTextNode(prop + ' ' + item[prop]);
+
+				p.appendChild(content);
+				root.appendChild(p);
+			}
+		}
 	}
 
 	exports.default = mapName;

@@ -14,10 +14,17 @@ ul {
 
 ul li {
 	font-size: 0.85em;
+	cursor: pointer;
+}
+
+.disappear {
+    display: none;
+    visibility: hidden;
 }
 
 #user {
     position: fixed;
     bottom: 1%;
     right: 1%;
+    width: 300px;
 }
