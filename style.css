@@ -1,11 +1,7 @@
 body {
     background-color: #ffffff;
     font-size: 1.25em;
-    font-family: 'Limelight', cursive;
-}
-
-a {
-  text-decoration: none;
+    font-family: 'Unlock', cursive;
 }
 
 ul {
@@ -15,6 +11,7 @@ ul {
 ul li {
 	font-size: 0.85em;
 	cursor: pointer;
+    padding-bottom: 7px;
 }
 
 .disappear {

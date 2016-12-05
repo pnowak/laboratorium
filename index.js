@@ -3,8 +3,8 @@
 import status from './src/status';
 import json from './src/json';
 import filterActive from './src/active';
-import mapName from './src/mapUsers';
-import createLi from './src/li';
+import mapUser from './src/mapUsers';
+import createLi from './src/users';
 import { isWomen, isMen, filterGender } from './src/gender';
 
 const url = 'http://zadanie.laboratorium.ee/users.json';
@@ -33,7 +33,7 @@ fetch(url)
 
             return sort;
         }).then(function(sort) {
-            mapName(sort);
+            mapUser(sort);
         }).catch(function(error) {
           	console.log('Request failed', error);
         });

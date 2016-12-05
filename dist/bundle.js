@@ -62,9 +62,9 @@
 
 	var _mapUsers2 = _interopRequireDefault(_mapUsers);
 
-	var _li = __webpack_require__(6);
+	var _users = __webpack_require__(6);
 
-	var _li2 = _interopRequireDefault(_li);
+	var _users2 = _interopRequireDefault(_users);
 
 	var _gender = __webpack_require__(7);
 
@@ -77,10 +77,10 @@
 	    var male = (0, _gender.filterGender)(active, 'gender', _gender.isMen);
 	    var female = (0, _gender.filterGender)(active, 'gender', _gender.isWomen);
 
-	    (0, _li2.default)('wszystkich: ' + data.length);
-	    (0, _li2.default)('aktywnych: ' + active.length);
-	    (0, _li2.default)('aktywnych kobiet: ' + female.length);
-	    (0, _li2.default)('aktywnych m\u0119\u017Cczyzn: ' + male.length);
+	    (0, _users2.default)('wszystkich: ' + data.length);
+	    (0, _users2.default)('aktywnych: ' + active.length);
+	    (0, _users2.default)('aktywnych kobiet: ' + female.length);
+	    (0, _users2.default)('aktywnych m\u0119\u017Cczyzn: ' + male.length);
 
 	    return active;
 	}).then(function (active) {
@@ -169,7 +169,7 @@
 
 	var _helpers = __webpack_require__(5);
 
-	function mapName(data) {
+	function mapUser(data) {
 		return data.map(function (item, index) {
 			item.full_name = [item.last_name, item.first_name, item.username].join(' ');
 			createLi(item.full_name, item);
@@ -190,29 +190,72 @@
 
 	function createUser(item) {
 		var root = (0, _helpers.get)('user');
+		var fragm = document.createDocumentFragment();
 
 		if (root.textContent !== '') {
 			var child = root.childNodes;
 			var arrayChild = Array.from(child);
 
 			arrayChild.forEach(function (item, index) {
-				console.log(item);
 				item.classList.add('disappear');
 			});
 		}
 
 		for (var prop in item) {
 			if (item.hasOwnProperty(prop)) {
-				var p = document.createElement('p');
-				var content = document.createTextNode(prop + ' ' + item[prop]);
+				if (prop === 'first_name' || prop === 'last_name' || prop === 'email') {
+					var p = document.createElement('p');
+					var content = document.createTextNode('' + item[prop]);
 
-				p.appendChild(content);
-				root.appendChild(p);
+					p.appendChild(content);
+					fragm.appendChild(p);
+				}
+
+				if (prop === 'avatar') {
+					var img = document.createElement('img');
+					var src = item[prop] ? img.setAttribute('src', item[prop]) : '';
+
+					fragm.appendChild(img);
+				}
+
+				if (prop === 'coordinates') {
+					var div = document.createElement('div');
+					div.style.width = 300 + 'px';
+					div.style.height = 200 + 'px';
+
+					createMap(item[prop], div);
+
+					fragm.appendChild(div);
+				}
 			}
 		}
+
+		root.appendChild(fragm);
 	}
 
-	exports.default = mapName;
+	function createMap(address, div) {
+		var geocoder = new google.maps.Geocoder();
+		var latlng = { lat: parseFloat(address.lat), lng: parseFloat(address.lng) };
+		var map = void 0;
+		var marker = void 0;
+
+		geocoder.geocode({ 'location': latlng }, function (results, status) {
+			if (status === 'OK') {
+				map = new google.maps.Map(div, {
+					zoom: 8,
+					center: latlng
+				});
+				marker = new google.maps.Marker({
+					map: map,
+					position: latlng
+				});
+			} else {
+				console.log('Geocoder failed due to: ' + status);
+			}
+		});
+	}
+
+	exports.default = mapUser;
 
 /***/ },
 /* 5 */

@@ -2,7 +2,7 @@
 
 import { get } from './helpers';
 
-function mapName(data) {
+function mapUser(data) {
 	return data.map(function (item, index) {
         item.full_name = [item.last_name, item.first_name, item.username].join(' ');
         createLi(item.full_name, item);
@@ -23,26 +23,69 @@ function createLi(value, item) {
 
 function createUser(item) {
 	const root = get('user');
+	let fragm = document.createDocumentFragment();
 
 	if (root.textContent !== '') {
 		let child = root.childNodes;
 		let arrayChild = Array.from(child);
 
 		arrayChild.forEach(function (item, index) {
-			console.log(item);
 			item.classList.add('disappear');
 		});
 	}
 
 	for (let prop in item) {
-        if (item.hasOwnProperty(prop)) {
-        	let p = document.createElement('p');
-        	let content = document.createTextNode(`${prop} ${item[prop]}`);
+		if (item.hasOwnProperty(prop)) {
+			if (prop === 'first_name' || prop === 'last_name' || prop === 'email') {
+				let p = document.createElement('p');
+				let content = document.createTextNode(`${item[prop]}`);
 
-        	p.appendChild(content);
-            root.appendChild(p);
-        }
-    }	
+				p.appendChild(content);
+				fragm.appendChild(p);
+			}
+
+			if (prop === 'avatar') {
+				let img = document.createElement('img');
+				let src = item[prop] ? img.setAttribute('src', item[prop]) : '';
+
+				fragm.appendChild(img);
+			}
+
+			if (prop === 'coordinates') {
+				let div = document.createElement('div');
+				div.style.width = 300 + 'px';
+				div.style.height = 200 + 'px';
+
+				createMap(item[prop], div);
+
+				fragm.appendChild(div);
+			}
+		}
+	}
+
+	root.appendChild(fragm);
 }
 
-export default mapName;
+function createMap(address, div) {
+	const geocoder = new google.maps.Geocoder;
+    let latlng = {lat: parseFloat(address.lat), lng: parseFloat(address.lng)};
+    let map;
+    let marker;
+
+    geocoder.geocode({'location': latlng}, function(results, status) {
+      	if (status === 'OK') {
+        	map = new google.maps.Map(div, {
+                zoom: 8,
+                center: latlng
+            });
+            marker = new google.maps.Marker({
+                map: map,
+                position: latlng
+            });
+      	} else {
+        	console.log('Geocoder failed due to: ' + status);
+      	}
+    });
+}
+
+export default mapUser;
