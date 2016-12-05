@@ -37,7 +37,8 @@ function createUser(item) {
 	for (let prop in item) {
 		if (item.hasOwnProperty(prop)) {
 			if (prop === 'favorites' && item[prop].color !== null) {
-				document.body.style.backgroundColor = item[prop].color;
+				const body = document.body;
+				body.style.backgroundColor = item[prop].color;
 			}
 
 			if ((prop === 'first_name' && item[prop] !== null) || (prop === 'last_name' && item[prop] !== null) || (prop === 'email' && item[prop] !== null)) {

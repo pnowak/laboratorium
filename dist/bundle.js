@@ -58,15 +58,19 @@
 
 	var _active2 = _interopRequireDefault(_active);
 
-	var _mapUsers = __webpack_require__(4);
+	var _sixMonth = __webpack_require__(4);
+
+	var _sixMonth2 = _interopRequireDefault(_sixMonth);
+
+	var _mapUsers = __webpack_require__(5);
 
 	var _mapUsers2 = _interopRequireDefault(_mapUsers);
 
-	var _users = __webpack_require__(6);
+	var _users = __webpack_require__(7);
 
 	var _users2 = _interopRequireDefault(_users);
 
-	var _gender = __webpack_require__(7);
+	var _gender = __webpack_require__(8);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -76,11 +80,13 @@
 	    var active = (0, _active2.default)(data);
 	    var male = (0, _gender.filterGender)(active, 'gender', _gender.isMen);
 	    var female = (0, _gender.filterGender)(active, 'gender', _gender.isWomen);
+	    var halfYear = (0, _sixMonth2.default)(active);
 
 	    (0, _users2.default)('wszystkich: ' + data.length);
 	    (0, _users2.default)('aktywnych: ' + active.length);
 	    (0, _users2.default)('aktywnych kobiet: ' + female.length);
 	    (0, _users2.default)('aktywnych m\u0119\u017Cczyzn: ' + male.length);
+	    (0, _users2.default)('aktywnych w ci\u0105gu p\xF3\u0142 roku: ' + halfYear.length);
 
 	    return active;
 	}).then(function (active) {
@@ -159,6 +165,35 @@
 
 /***/ },
 /* 4 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	function filterSixMonth(data) {
+		var filter = data.filter(function (item, index) {
+			for (var i in item) {
+				if (i === 'last_login' && item[i] !== null) {
+					var half = 15768000000;
+					var now = Date.now();
+					var last = Date.parse(item[i]);console.log(now - last);
+
+					if (now - last > half) {
+						return item;
+					}
+				}
+			}
+		});
+
+		return filter;
+	}
+
+	exports.default = filterSixMonth;
+
+/***/ },
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -167,7 +202,7 @@
 		value: true
 	});
 
-	var _helpers = __webpack_require__(5);
+	var _helpers = __webpack_require__(6);
 
 	function mapUser(data) {
 		return data.map(function (item, index) {
@@ -204,7 +239,8 @@
 		for (var prop in item) {
 			if (item.hasOwnProperty(prop)) {
 				if (prop === 'favorites' && item[prop].color !== null) {
-					document.body.style.backgroundColor = item[prop].color;
+					var body = document.body;
+					body.style.backgroundColor = item[prop].color;
 				}
 
 				if (prop === 'first_name' && item[prop] !== null || prop === 'last_name' && item[prop] !== null || prop === 'email' && item[prop] !== null) {
@@ -262,7 +298,7 @@
 	exports.default = mapUser;
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -276,7 +312,7 @@
 	}
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -285,7 +321,7 @@
 		value: true
 	});
 
-	var _helpers = __webpack_require__(5);
+	var _helpers = __webpack_require__(6);
 
 	function createLi(value) {
 		var node = (0, _helpers.get)('summary');
@@ -299,7 +335,7 @@
 	exports.default = createLi;
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
