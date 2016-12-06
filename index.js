@@ -3,9 +3,9 @@
 import status from './src/status';
 import json from './src/json';
 import filterActive from './src/active';
-import filterSixMonth from './src/sixMonth';
-import mapUser from './src/mapUsers';
+import filterLastSixMonth from './src/lastSixMonth';
 import createLi from './src/users';
+import mapUser from './src/mapUsers';
 import { isWomen, isMen, filterGender } from './src/gender';
 
 const url = 'http://zadanie.laboratorium.ee/users.json';
@@ -17,7 +17,7 @@ fetch(url)
     	const active = filterActive(data);
         const male = filterGender(active, 'gender', isMen);
         const female = filterGender(active, 'gender', isWomen);
-        const halfYear = filterSixMonth(active);
+        const halfYear = filterLastSixMonth(active);
 
         createLi(`wszystkich: ${data.length}`);
         createLi(`aktywnych: ${active.length}`);

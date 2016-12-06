@@ -5,11 +5,11 @@ import { get } from './helpers';
 function mapUser(data) {
 	return data.map(function (item, index) {
         item.full_name = [item.last_name, item.first_name, item.username].join(' ');
-        createLi(item.full_name, item);
+        createUserLi(item.full_name, item);
     });
 }
 
-function createLi(value, item) {
+function createUserLi(value, item) {
 	const node = get('users');
 	const li = document.createElement('li');
 	const content = document.createTextNode(value);
@@ -36,9 +36,14 @@ function createUser(item) {
 
 	for (let prop in item) {
 		if (item.hasOwnProperty(prop)) {
-			if (prop === 'favorites' && item[prop].color !== null) {
+			if (prop === 'favorites') {
 				const body = document.body;
-				body.style.backgroundColor = item[prop].color;
+
+				if (item[prop].color !== null) {
+					body.style.backgroundColor = item[prop].color;
+				} else {
+					body.style.backgroundColor = '#ffffff';
+				}
 			}
 
 			if ((prop === 'first_name' && item[prop] !== null) || (prop === 'last_name' && item[prop] !== null) || (prop === 'email' && item[prop] !== null)) {
@@ -72,25 +77,31 @@ function createUser(item) {
 }
 
 function createMap(address, div) {
-	const geocoder = new google.maps.Geocoder;
-    let latlng = {lat: parseFloat(address.lat), lng: parseFloat(address.lng)};
-    let map;
-    let marker;
+		const geocoder = new google.maps.Geocoder();
+		const latlng = { lat: parseFloat(address.lat), lng: parseFloat(address.lng) };
+		const root = get('user');
+        const p = document.createElement('p');
+		let map;
+		let marker;
+		let place;
 
-    geocoder.geocode({'location': latlng}, function(results, status) {
-      	if (status === 'OK') {
-        	map = new google.maps.Map(div, {
-                zoom: 8,
-                center: latlng
-            });
-            marker = new google.maps.Marker({
-                map: map,
-                position: latlng
-            });
-      	} else {
-        	console.log('Geocoder failed due to: ' + status);
-      	}
-    });
-}
+		geocoder.geocode({ 'location': latlng }, function (results, status) {
+			if (status === 'OK') {
+				map = new google.maps.Map(div, {
+					zoom: 8,
+					center: latlng
+				});
+				marker = new google.maps.Marker({
+					map: map,
+					position: latlng
+				});
+				place = document.createTextNode(results[0].formatted_address);
+				p.appendChild(place);
+				root.appendChild(p);
+			} else {
+				console.log('Geocoder failed due to: ' + status);
+			}
+		});
+	}
 
 export default mapUser;

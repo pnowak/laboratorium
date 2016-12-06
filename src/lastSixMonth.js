@@ -1,14 +1,14 @@
 'use strict';
 
-function filterSixMonth(data) {
+function filterLastSixMonth(data) {
 	let filter = data.filter(function (item, index) {
 		for (let i in item) {
 			if (i === 'last_login' && item[i] !== null) {
-				const half = 15768000000;
+				const halfOfYear = 15768000000;
 				let now = Date.now();
 				let last = Date.parse(item[i]);
 
-				if ((now - last) > half) {
+				if ((now - last) <= halfOfYear) {
 					return item;
 				}
 			}
@@ -18,4 +18,4 @@ function filterSixMonth(data) {
 	return filter;
 }
 
-export default filterSixMonth;
+export default filterLastSixMonth;

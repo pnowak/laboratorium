@@ -58,9 +58,9 @@
 
 	var _active2 = _interopRequireDefault(_active);
 
-	var _sixMonth = __webpack_require__(4);
+	var _lastSixMonth = __webpack_require__(4);
 
-	var _sixMonth2 = _interopRequireDefault(_sixMonth);
+	var _lastSixMonth2 = _interopRequireDefault(_lastSixMonth);
 
 	var _mapUsers = __webpack_require__(5);
 
@@ -80,7 +80,7 @@
 	    var active = (0, _active2.default)(data);
 	    var male = (0, _gender.filterGender)(active, 'gender', _gender.isMen);
 	    var female = (0, _gender.filterGender)(active, 'gender', _gender.isWomen);
-	    var halfYear = (0, _sixMonth2.default)(active);
+	    var halfYear = (0, _lastSixMonth2.default)(active);
 
 	    (0, _users2.default)('wszystkich: ' + data.length);
 	    (0, _users2.default)('aktywnych: ' + active.length);
@@ -172,15 +172,15 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	function filterSixMonth(data) {
+	function filterLastSixMonth(data) {
 		var filter = data.filter(function (item, index) {
 			for (var i in item) {
 				if (i === 'last_login' && item[i] !== null) {
-					var half = 15768000000;
+					var halfOfYear = 15768000000;
 					var now = Date.now();
-					var last = Date.parse(item[i]);console.log(now - last);
+					var last = Date.parse(item[i]);
 
-					if (now - last > half) {
+					if (now - last <= halfOfYear) {
 						return item;
 					}
 				}
@@ -190,7 +190,7 @@
 		return filter;
 	}
 
-	exports.default = filterSixMonth;
+	exports.default = filterLastSixMonth;
 
 /***/ },
 /* 5 */
@@ -207,11 +207,11 @@
 	function mapUser(data) {
 		return data.map(function (item, index) {
 			item.full_name = [item.last_name, item.first_name, item.username].join(' ');
-			createLi(item.full_name, item);
+			createUserLi(item.full_name, item);
 		});
 	}
 
-	function createLi(value, item) {
+	function createUserLi(value, item) {
 		var node = (0, _helpers.get)('users');
 		var li = document.createElement('li');
 		var content = document.createTextNode(value);
@@ -238,9 +238,14 @@
 
 		for (var prop in item) {
 			if (item.hasOwnProperty(prop)) {
-				if (prop === 'favorites' && item[prop].color !== null) {
+				if (prop === 'favorites') {
 					var body = document.body;
-					body.style.backgroundColor = item[prop].color;
+
+					if (item[prop].color !== null) {
+						body.style.backgroundColor = item[prop].color;
+					} else {
+						body.style.backgroundColor = '#ffffff';
+					}
 				}
 
 				if (prop === 'first_name' && item[prop] !== null || prop === 'last_name' && item[prop] !== null || prop === 'email' && item[prop] !== null) {
@@ -276,8 +281,11 @@
 	function createMap(address, div) {
 		var geocoder = new google.maps.Geocoder();
 		var latlng = { lat: parseFloat(address.lat), lng: parseFloat(address.lng) };
+		var root = (0, _helpers.get)('user');
+		var p = document.createElement('p');
 		var map = void 0;
 		var marker = void 0;
+		var place = void 0;
 
 		geocoder.geocode({ 'location': latlng }, function (results, status) {
 			if (status === 'OK') {
@@ -289,6 +297,9 @@
 					map: map,
 					position: latlng
 				});
+				place = document.createTextNode(results[0].formatted_address);
+				p.appendChild(place);
+				root.appendChild(p);
 			} else {
 				console.log('Geocoder failed due to: ' + status);
 			}
